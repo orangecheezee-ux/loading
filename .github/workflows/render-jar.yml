@@ -6,6 +6,7 @@ on:
     paths:
       - 'pulsepanel.jar.b64'
       - 'pulsepanel.jar.b64.*'
+      - 'pulsepanel.jar.parts.json'
       - '.github/workflows/render-jar.yml'
 
 permissions:
@@ -24,11 +25,16 @@ jobs:
           import base64, hashlib, json
           from pathlib import Path
 
-          parts = sorted(Path('.').glob('pulsepanel.jar.b64.*'))
-          if parts:
-              text = ''.join(part.read_text().strip() for part in parts)
+          manifest = Path('pulsepanel.jar.parts.json')
+          if manifest.exists():
+              names = json.loads(manifest.read_text())['parts']
+              text = ''.join(Path(name).read_text().strip() for name in names)
           else:
-              text = Path('pulsepanel.jar.b64').read_text().strip()
+              parts = sorted(Path('.').glob('pulsepanel.jar.b64.*'))
+              if parts:
+                  text = ''.join(part.read_text().strip() for part in parts)
+              else:
+                  text = Path('pulsepanel.jar.b64').read_text().strip()
 
           raw = base64.b64decode(text)
           Path('pulsepanel.jar').write_bytes(raw)
