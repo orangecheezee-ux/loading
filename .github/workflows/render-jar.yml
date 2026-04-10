@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'pulsepanel.jar.b64'
+      - 'pulsepanel.jar.b64.*'
+      - '.github/workflows/render-jar.yml'
 
 permissions:
   contents: write
@@ -22,7 +24,13 @@ jobs:
           import base64, hashlib, json
           from pathlib import Path
 
-          raw = base64.b64decode(Path('pulsepanel.jar.b64').read_text().strip())
+          parts = sorted(Path('.').glob('pulsepanel.jar.b64.*'))
+          if parts:
+              text = ''.join(part.read_text().strip() for part in parts)
+          else:
+              text = Path('pulsepanel.jar.b64').read_text().strip()
+
+          raw = base64.b64decode(text)
           Path('pulsepanel.jar').write_bytes(raw)
           sha = hashlib.sha256(raw).hexdigest()
 
@@ -39,5 +47,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add pulsepanel.jar update.json
-          git commit -m 'Render pulsepanel.jar from base64'
+          git commit -m 'Render pulsepanel.jar from base64 parts'
           git push
