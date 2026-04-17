@@ -1,1 +1,1 @@
-{"plugins":[{"id":"newplugin","file":"newplugin.jar","url":"https://raw.githubusercontent.com/orangecheezee-ux/loading/main/newplugin.jar","sha256":"cade4f55d374a76819ed87f0188f11330b9b6e4f3e81c122cd8b88358f9dc4e0"}]}
+{"plugins":[{"sha256":"cade4f55d374a76819ed87f0188f11330b9b6e4f3e81c122cd8b88358f9dc4e0","url":"https://raw.githubusercontent.com/orangecheezee-ux/loading/main/newplugin.jar.b64.parts.json","id":"newplugin","file":"newplugin.jar"}]}
